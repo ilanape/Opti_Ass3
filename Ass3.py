@@ -1,5 +1,4 @@
 import numpy as np
-import scipy.linalg
 from scipy.sparse import spdiags
 import matplotlib.pyplot as plt
 
@@ -11,7 +10,7 @@ def irls(b, G, A, n, lamb, eps):
 
     for i in range(10):
         xi = np.linalg.inv(AT @ A + lamb * GT @ W @ G) @ AT @ b
-        W[i:i] = 1 / (np.abs((G @ xi)[i]) + eps)
+        W[i:i] = 1 / (np.abs(np.transpose(G[i]) @ xi) + eps)
 
     return xi
 
@@ -47,8 +46,7 @@ def main():
 
     # IRLS
     plt.figure()
-    fx = irls(y, G, A, n, 1, 0.001)
-    plt.plot(x, fx)
+    plt.plot(x, irls(y, G, A, n, 1, 0.001))
     plt.show()
 
 
