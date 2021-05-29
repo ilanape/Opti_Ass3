@@ -39,7 +39,7 @@ eps = 0.001
 
 for i in range(10):
     xi = np.linalg.inv(AT @ A + lamb * GT @ W @ G) @ AT @ y
-    W[i][i] = 1 / (np.abs(np.transpose(G[i]) @ xi) + eps)
+    W[i, i] = 1 / ((np.abs(G @ xi)[i]) + eps)
 
 plt.figure()
 plt.plot(x, xi)
