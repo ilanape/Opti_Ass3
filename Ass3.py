@@ -23,24 +23,27 @@ y = f + etta
 # plt.show()
 
 # regularized non-weighted LS L2
-# AT = np.transpose(A)
-# fn = np.linalg.inv(AT @ A + (80 / 2) * np.transpose(G) @ G) @ AT @ y
-# plt.figure()
-# plt.plot(x, f)
-# plt.plot(x, fn)
+AT = np.transpose(A)
+lamb = 80
+fn = np.linalg.inv(AT @ A + (lamb / 2) * np.transpose(G) @ G) @ AT @ y
+plt.figure()
+# plt.plot(x, f, 'b', label="Original")
+plt.plot(x, fn, 'g',  label="LS")
 # plt.show()
 
 # IRLS
 W = np.eye(n)
-AT = np.transpose(A)
 GT = np.transpose(G)
 lamb = 1
 eps = 0.001
 
-for i in range(10):
-    xi = np.linalg.inv(AT @ A + lamb * GT @ W @ G) @ AT @ y
-    W[i, i] = 1 / ((np.abs(G @ xi)[i]) + eps)
+for k in range(10):
+    x_k = np.linalg.inv(AT @ A + (lamb / 2) * GT @ W @ G) @ AT @ y
+    Gx_k = G @ x_k
+    W_diag = [1 / (np.abs(Gx_k[i]) + eps) for i in range(n)]
+    W = np.diag(W_diag)
 
-plt.figure()
-plt.plot(x, xi)
+# plt.figure()
+plt.plot(x, x_k, 'r', label="IRLS")
+plt.legend()
 plt.show()
