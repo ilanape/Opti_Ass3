@@ -16,7 +16,7 @@ A = np.eye(n)
 etta = 0.1 * np.random.randn(np.size(x))
 y = f + etta
 
-# original
+# # original
 # plt.figure()
 # plt.plot(x, y)
 # plt.plot(x, f)
@@ -27,8 +27,9 @@ AT = np.transpose(A)
 lamb = 80
 fn = np.linalg.inv(AT @ A + (lamb / 2) * np.transpose(G) @ G) @ AT @ y
 plt.figure()
-# plt.plot(x, f, 'b', label="Original")
-plt.plot(x, fn, 'g',  label="LS")
+plt.plot(x, f, 'b', label="Original")
+plt.plot(x, fn, 'g',  label="LS, lambda=80")
+# plt.legend()
 # plt.show()
 
 # IRLS
@@ -42,8 +43,8 @@ for k in range(10):
     Gx_k = G @ x_k
     W_diag = [1 / (np.abs(Gx_k[i]) + eps) for i in range(n)]
     W = np.diag(W_diag)
-
-# plt.figure()
-plt.plot(x, x_k, 'r', label="IRLS")
+#
+# # plt.figure()
+plt.plot(x, x_k, 'r', label="IRLS, lamda=1, eps=0.001")
 plt.legend()
 plt.show()
