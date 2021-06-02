@@ -54,6 +54,7 @@ def gradient_descent(A, b, x):
 
         # apply iteration
         x = x + alpha * d
+        np.clip(x, -1, 1)
 
         # Convergence criterion
         if (np.linalg.norm(grad_x) / initial_grad_norm) < 0.1:
@@ -85,6 +86,7 @@ def newton(A, b, x):
 
         # apply iteration
         x = x + alpha * d
+        np.clip(x, -1, 1)
 
         # Convergence criterion
         if (np.linalg.norm(grad_x) / initial_grad_norm) < 0.1:
@@ -147,11 +149,11 @@ plt.xlabel("k iteration")
 plt.ylabel("error")
 
 plt.title('SD')
-x_axis, y_axis = gradient_descent(A, x, b)
+x_axis, y_axis = gradient_descent(A, w, b)
 plt.semilogy(x_axis, y_axis, label="")
 
 plt.title('Newton')
-x1_axis, y1_axis = newton(A, x, b)
+x1_axis, y1_axis = newton(A, w, b)
 plt.semilogy(x1_axis, y1_axis, label="")
 
 plt.legend()
