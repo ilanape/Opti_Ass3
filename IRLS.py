@@ -45,6 +45,6 @@ for k in range(10):
     W = np.diag(W_diag)
 #
 # # plt.figure()
-plt.plot(x, x_k, 'r', label="IRLS, lamda=1, eps=0.001")
+plt.plot(x, x_k, 'r', label="IRLS, lambda=1, eps=0.001")
 plt.legend()
 plt.show()
