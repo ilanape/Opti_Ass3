@@ -40,9 +40,6 @@ class MnistDataloader(object):
         for i in range(size):
             img = np.array(image_data[i * rows * cols:(i + 1) * rows * cols])
             img = img.reshape(28, 28)
-            meanval = np.mean(img)
-            stdval = np.std(img)
-            img = (img - meanval) / (stdval + 0.1)
             images[i][:] = img
 
         return images, labels

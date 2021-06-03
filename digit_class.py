@@ -1,6 +1,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+from loadMNIST_V2 import MnistDataloader
+
 
 def sigmoid(x):
     return 1.0 / (1 + np.exp(-x))
@@ -23,9 +25,9 @@ def func(X, w, c1, c2):
 
     return Fw, Grad, Hess
 
-def linesearch(x, Fx, grad_x, d, alpha, beta, c):
+def linesearch(x, Fx, grad_x, d, alpha, beta, c, labels, A):
     for j in range(100):
-        c1 =
+        c1 = labels
         Fx_ad, grad_ad, hess_ad = func(A, x+alpha*d, c1, 1-c1)
         if Fx_ad <= Fx + c*alpha*np.dot(grad_x, d):
             return alpha
@@ -33,24 +35,22 @@ def linesearch(x, Fx, grad_x, d, alpha, beta, c):
             alpha = beta * alpha
 
 
-def gradient_descent(A, b, x):
-    c1 =
+def gradient_descent(A, x, labels):
+    c1 = labels
     Fx1, grad_x1, hessx1 = func(A, x, c1, 1 - c1)
     initial_grad_norm = np.linalg.norm(grad_x1)
-    cb =
-    Fb, grad_b, hess_b = func(A, b, cb, 1 - cb)
 
     x_axis = []
     y_axis = []
     for i in range(100):
         # define weight
-        c1 =
+        c1 = labels
         Fx, grad_x, hess_x = func(A, x, c1, 1 - c1)
         d = -grad_x
-        alpha = linesearch(x, Fx, grad_x ,grad_x, 0.25, 0.5, 1e-4)
+        alpha = linesearch(x, Fx, grad_x, grad_x, 0.25, 0.5, 1e-4, labels, A)
 
         x_axis.append(i)
-        y_axis.append(np.abs(Fx - Fb))
+        y_axis.append(np.abs(Fx))
 
         # apply iteration
         x = x + alpha * d
@@ -63,36 +63,44 @@ def gradient_descent(A, b, x):
     return x_axis, y_axis
 
 
+#
+# def newton(A, b, x, labels):
+#     c1 = labels
+#     Fx1, grad_x1, hessx1 = func(A, x, c1, 1 - c1)
+#     initial_grad_norm = np.linalg.norm(grad_x1)
+#     cb =
+#     Fb, grad_b, hess_b = func(A, b, cb, 1 - cb)
+#
+#     x_axis = []
+#     y_axis = []
+#
+#     for i in range(100):
+#         # define weight
+#         c1 =
+#         Fx, grad_x, hess_x = func(A, x, c1, 1 - c1)
+#         d = -np.linalg.inv(hess_x) @ grad_x
+#         alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4)
+#
+#         x_axis.append(i)
+#         y_axis.append(np.abs(Fx - Fb))
+#
+#         # apply iteration
+#         x = x + alpha * d
+#         np.clip(x, -1, 1)
+#
+#         # Convergence criterion
+#         if (np.linalg.norm(grad_x) / initial_grad_norm) < 0.1:
+#             break
+#
+#     return x_axis, y_axis
 
-def newton(A, b, x):
-    c1 =
-    Fx1, grad_x1, hessx1 = func(A, x, c1, 1 - c1)
-    initial_grad_norm = np.linalg.norm(grad_x1)
-    cb =
-    Fb, grad_b, hess_b = func(A, b, cb, 1 - cb)
-
-    x_axis = []
-    y_axis = []
-
-    for i in range(100):
-        # define weight
-        c1 =
-        Fx, grad_x, hess_x = func(A, x, c1, 1 - c1)
-        d = -np.linalg.inv(hess_x) @ grad_x
-        alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4)
-
-        x_axis.append(i)
-        y_axis.append(np.abs(Fx - Fb))
-
-        # apply iteration
-        x = x + alpha * d
-        np.clip(x, -1, 1)
-
-        # Convergence criterion
-        if (np.linalg.norm(grad_x) / initial_grad_norm) < 0.1:
-            break
-
-    return x_axis, y_axis
+def normalization(vectors):
+    normalized_vectors = []
+    for i in range(len(vectors)):
+        normalized_vectors.append(np.array(vectors[i]).flatten())
+        for j in range(len(vectors[i])):
+            normalized_vectors[i][j] /= 255
+    return normalized_vectors
 
 
 # plots
@@ -144,17 +152,54 @@ def newton(A, b, x):
 # plt.show()
 
 # 4c
+mnistDataLoader = MnistDataloader(
+    'train-images.idx3-ubyte',
+    'train-labels.idx1-ubyte',
+    't10k-images.idx3-ubyte',
+    't10k-labels.idx1-ubyte')
+(x_train, y_train), (x_test, y_test) = mnistDataLoader.load_data()
+
+x_train_filtered = x_train[:30000]
+y_train_filtered = y_train[:30000]
+x_test_filtered = x_train[:30000]
+y_test_filtered = y_train[:30000]
+
+# 0,1 filter
+train_filter_indx = np.where((y_train_filtered == 0 ) | (y_train_filtered == 1))
+test_filter_indx = np.where((y_test_filtered == 0) | (y_test_filtered == 1))
+
+# 8,9 filter
+# train_filter_indx = np.where((y_train_filtered == 8 ) | (y_train_filtered == 9))
+# test_filter_indx = np.where((y_test_filtered == 8) | (y_test_filtered == 9))
+
+# filtered data
+x_train_filtered_f = x_train_filtered[train_filter_indx]
+y_train_filtered_f = y_train_filtered[train_filter_indx]
+x_test_filtered_f = x_test_filtered[test_filter_indx]
+y_test_filtered_f = y_test_filtered[test_filter_indx]
+
+# normalization
+x_train_norm = normalization(x_train_filtered_f)
+x_test_norm = normalization(x_test_filtered_f )
+
+# flatten and matrix build
+A = []
+for i in range(len(x_train_norm)):
+    np.concatenate(A, np.array(x_test_norm[i]).flatten())
+A = np.transpose(A)
+
 plt.figure()
 plt.xlabel("k iteration")
 plt.ylabel("error")
+w = np.zeros(784)
 
 plt.title('SD')
-x_axis, y_axis = gradient_descent(A, w, b)
-plt.semilogy(x_axis, y_axis, label="")
+x_axis, y_axis = gradient_descent(A, w, y_train_filtered_f)
+plt.semilogy(x_axis, y_axis, label="SD")
 
-plt.title('Newton')
-x1_axis, y1_axis = newton(A, w, b)
-plt.semilogy(x1_axis, y1_axis, label="")
+# plt.title('Newton')
+# x1_axis, y1_axis = newton(A, b, w, y_train_filtered_f)
+# plt.semilogy(x1_axis, y1_axis, label="")
 
 plt.legend()
 plt.show()
