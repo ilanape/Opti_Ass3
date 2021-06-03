@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from functions import normalization, gradient_descent
+from functions import gradient_descent
 from loadMNIST_V2 import MnistDataloader
 
 # 4c
@@ -42,26 +42,26 @@ for i in range(30000):
 #         x_test_filtered.append(x_test[i])
 #         y_test_filtered.append(y_test[i])
 
-# normalization
-x_train_filtered = normalization(x_train_filtered)
-x_test_filtered = normalization(x_test_filtered)
-
-# reshape
-A = np.reshape(x_train_filtered, (np.shape(x_train_filtered)[0], 784))
-A = np.transpose(A)
+# reshape and normalize
+A_train = np.reshape(x_train_filtered, (np.shape(x_train_filtered)[0], 784)) / 255
+A_train = np.transpose(A_train)
+A_test = np.reshape(x_test_filtered, (np.shape(x_test_filtered)[0], 784)) / 255
+A_test = np.transpose(A_test)
 
 plt.figure()
 plt.xlabel("k iteration")
 plt.ylabel("error")
-x = np.zeros(784)
+w = np.zeros(784)
 
 plt.title('SD')
-x_axis, y_axis = gradient_descent(A, x, y_train_filtered)
-plt.semilogy(x_axis, y_axis, label="SD")
+x_axis, y_axis = gradient_descent(A_train, w, 1 - y_train_filtered)
+x1_axis, y1_axis = gradient_descent(A_test, w, 1 - y_test_filtered)
+plt.semilogy(x_axis, y_axis, label="SD train data")
+plt.semilogy(x1_axis, y1_axis, label="SD test data")
 
-# plt.title('Newton')
-# x1_axis, y1_axis = newton(A, b, w, y_train)
-# plt.semilogy(x1_axis, y1_axis, label="")
+# # plt.title('Newton')
+# # x1_axis, y1_axis = newton(A, b, w, y_train)
+# # plt.semilogy(x1_axis, y1_axis, label="")
 
 plt.legend()
 plt.show()

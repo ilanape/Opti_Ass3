@@ -5,8 +5,9 @@ def sigmoid(x):
     return 1.0 / (1 + np.exp(-x))
 
 
-def func(X, w, c1):
+def func(X, w, labels):
     # Linear Regression Objective
+    c1 = labels
     c2 = 1 - c1
     m = np.shape(X)[1]
     sigm_XTw = sigmoid(np.transpose(X) @ w)
@@ -24,10 +25,9 @@ def func(X, w, c1):
     return Fw, Grad, Hess
 
 
-def linesearch(x, Fx, grad_x, d, alpha, beta, c, labels, A):
+def linesearch(x, Fx, grad_x, d, alpha, beta, c, c1, A):
     for j in range(100):
-        c1 = np.array(labels)
-        Fx_ad, grad_ad, hess_ad = func(A, x + alpha * d, c1, 1 - c1)
+        Fx_ad, grad_ad, hess_ad = func(A, x + alpha * d, c1)
         if Fx_ad <= Fx + c * alpha * np.dot(grad_x, d):
             return alpha
         else:
@@ -36,18 +36,14 @@ def linesearch(x, Fx, grad_x, d, alpha, beta, c, labels, A):
 
 def gradient_descent(A, x, labels):
     c1 = np.array(labels)
-    Fx1, grad_x1, hessx1 = func(A, x, c1, 1 - c1)
-    initial_grad_norm = np.linalg.norm(grad_x1)
-
     x_axis = []
     y_axis = []
     for i in range(100):
         print(i)
         # define weight
-        c1 = np.array(labels)
-        Fx, grad_x, hess_x = func(A, x, c1, 1 - c1)
+        Fx, grad_x, hess_x = func(A, x, c1)
         d = -grad_x
-        alpha = linesearch(x, Fx, grad_x, grad_x, 0.25, 0.5, 1e-4, labels, A)
+        alpha = linesearch(x, Fx, grad_x, grad_x, 0.25, 0.5, 1e-4, c1, A)
 
         x_axis.append(i)
         y_axis.append(np.abs(Fx))
@@ -57,7 +53,7 @@ def gradient_descent(A, x, labels):
         x = np.clip(x, -1, 1)
 
         # Convergence criterion
-        if (np.linalg.norm(grad_x) / initial_grad_norm) < 0.1:
+        if Fx < 0.001:
             break
 
     return x_axis, y_axis
@@ -65,15 +61,12 @@ def gradient_descent(A, x, labels):
 
 def newton(A, b, x, labels):
     c1 = np.array(labels)
-    Fx1, grad_x1, hessx1 = func(A, x, c1, 1 - c1)
-    initial_grad_norm = np.linalg.norm(grad_x1)
-
     x_axis = []
     y_axis = []
 
     for i in range(100):
         # define weight
-        Fx, grad_x, hess_x = func(A, x, c1, 1 - c1)
+        Fx, grad_x, hess_x = func(A, x, c1)
         d = -np.linalg.inv(hess_x) @ grad_x
         alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4)
 
@@ -85,16 +78,8 @@ def newton(A, b, x, labels):
         np.clip(x, -1, 1)
 
         # Convergence criterion
-        if (np.linalg.norm(grad_x) / initial_grad_norm) < 0.1:
+        if Fx < 0.001:
             break
 
     return x_axis, y_axis
 
-
-def normalization(vectors):
-    normalized_vectors = []
-    for i in range(len(vectors)):
-        normalized_vectors.append(np.array(vectors[i]).flatten())
-        for j in range(len(vectors[i])):
-            normalized_vectors[i][j] /= 255
-    return np.array(normalized_vectors)
