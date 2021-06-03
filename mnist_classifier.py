@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from digit_class import normalization, gradient_descent
+from functions import normalization, gradient_descent
 from loadMNIST_V2 import MnistDataloader
 
 # 4c
@@ -27,6 +27,7 @@ for i in range(30000):
     if y_train[i] == 0 | y_train[i] == 1:
         x_train_filtered.append(x_train[i])
         y_train_filtered.append(y_train[i])
+
     if y_test[i] == 0 | y_test[i] == 1:
         x_test_filtered.append(x_test[i])
         y_test_filtered.append(y_test[i])
@@ -36,6 +37,7 @@ for i in range(30000):
 #     if y_train[i] == 8 | y_train[i] == 9:
 #         x_train_filtered.append(x_train[i])
 #         y_train_filtered.append(y_train[i])
+
 #     if y_test[i] == 8 | y_test[i] == 9:
 #         x_test_filtered.append(x_test[i])
 #         y_test_filtered.append(y_test[i])
@@ -45,8 +47,7 @@ x_train_filtered = normalization(x_train_filtered)
 x_test_filtered = normalization(x_test_filtered)
 
 # reshape
-n = np.shape(x_train_filtered)[0]
-A = np.reshape(x_train_filtered, (n, 784))
+A = np.reshape(x_train_filtered, (np.shape(x_train_filtered)[0], 784))
 A = np.transpose(A)
 
 plt.figure()

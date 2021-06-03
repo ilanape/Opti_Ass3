@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from digit_class import func
+from functions import func
 
 # 4b
 n = 20

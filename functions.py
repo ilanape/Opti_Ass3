@@ -1,7 +1,4 @@
 import numpy as np
-from matplotlib import pyplot as plt
-
-from loadMNIST_V2 import MnistDataloader
 
 
 def sigmoid(x):
@@ -101,4 +98,3 @@ def normalization(vectors):
         for j in range(len(vectors[i])):
             normalized_vectors[i][j] /= 255
     return np.array(normalized_vectors)
-
