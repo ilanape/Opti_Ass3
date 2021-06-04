@@ -47,7 +47,7 @@ def gradient_descent(A, x, labels):
         alpha = linesearch(x, Fx, grad_x, grad_x, 0.25, 0.5, 1e-4, c1, A)
 
         x_axis.append(i)
-        y_axis.append(np.abs(Fx))
+        y_axis.append(Fx)
 
         # apply iteration
         x = x + alpha * d
@@ -74,11 +74,11 @@ def newton(A, x, labels):
         alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4, c1, A)
 
         x_axis.append(i)
-        y_axis.append(np.abs(Fx))
+        y_axis.append(Fx)
 
         # apply iteration
         x = x + alpha * d
-        np.clip(x, -1, 1)
+        x = np.clip(x, -1, 1)
 
         # Convergence criterion
         if Fx < 0.001:

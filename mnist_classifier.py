@@ -51,7 +51,7 @@ A_test = np.transpose(A_test)
 
 plt.figure()
 plt.xlabel("k iteration")
-plt.ylabel("|F(w_k)|")
+plt.ylabel("F(w_k)")
 w = np.zeros(784)
 
 # plt.title('Gradient Descent Test data Objective 8 9')
@@ -59,8 +59,16 @@ w = np.zeros(784)
 # plt.semilogy(x_axis, y_axis, 'orange', label='Gradient Descent')
 
 plt.title('Exact Newton Test data Objective 8 9')
-x1_axis, y1_axis = newton(A_test, w, 1 - np.array(y_test_filtered))
-plt.semilogy(x1_axis, y1_axis, 'orange', label='Exact Newton')
+y_test_filtered = np.array(y_test_filtered)
+y_test_filtered = y_test_filtered % 8
+
+y_train_filtered = np.array(y_train_filtered)
+y_train_filtered = y_train_filtered % 8
+
+x_axis, y_axis = newton(A_train, w, 1 - y_train_filtered)
+x1_axis, y1_axis = newton(A_test, w, 1 - y_test_filtered)
+plt.semilogy(x_axis, y_axis, 'blue', label='Train data')
+plt.semilogy(x_axis, y1_axis, 'orange', label='Test data')
 
 plt.legend()
 plt.show()
