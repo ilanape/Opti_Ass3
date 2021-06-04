@@ -5,7 +5,7 @@ def sigmoid(x):
     return 1.0 / (1 + np.exp(-x))
 
 
-def func(X, w, labels):
+def func(X, w, labels, h=False):
     # Linear Regression Objective
     c1 = labels
     c2 = 1 - c1
@@ -17,17 +17,19 @@ def func(X, w, labels):
     # Gradient
     Grad = (1 / m) * X @ (sigm_XTw - c1)
 
-    # Hessian
-    D_diag = np.multiply(sigm_XTw, 1 - sigm_XTw)
-    D = np.diag(D_diag)
-    Hess = (1 / m) * X @ D @ np.transpose(X)
+    if h:
+        # Hessian
+        D_diag = np.multiply(sigm_XTw, 1 - sigm_XTw)
+        D = np.diag(D_diag)
+        Hess = (1 / m) * X @ D @ np.transpose(X)
+        return Fw, Grad, Hess
 
-    return Fw, Grad, Hess
+    return Fw, Grad
 
 
 def linesearch(x, Fx, grad_x, d, alpha, beta, c, c1, A):
     for j in range(100):
-        Fx_ad, grad_ad, hess_ad = func(A, x + alpha * d, c1)
+        Fx_ad, grad_ad = func(A, x + alpha * d, c1)
         if Fx_ad <= Fx + c * alpha * np.dot(grad_x, d):
             return alpha
         else:
@@ -40,8 +42,7 @@ def gradient_descent(A, x, labels):
     y_axis = []
     for i in range(100):
         print(i)
-        # define weight
-        Fx, grad_x, hess_x = func(A, x, c1)
+        Fx, grad_x = func(A, x, c1)
         d = -grad_x
         alpha = linesearch(x, Fx, grad_x, grad_x, 0.25, 0.5, 1e-4, c1, A)
 
@@ -59,16 +60,18 @@ def gradient_descent(A, x, labels):
     return x_axis, y_axis
 
 
-def newton(A, b, x, labels):
+def newton(A, x, labels):
     c1 = np.array(labels)
     x_axis = []
     y_axis = []
 
     for i in range(100):
-        # define weight
-        Fx, grad_x, hess_x = func(A, x, c1)
+        print(i)
+        Fx, grad_x, hess_x = func(A, x, c1, True)
+        shape = np.shape(hess_x)
+        hess_x = hess_x + 0.0001 * np.eye(shape[0], shape[1])
         d = -np.linalg.inv(hess_x) @ grad_x
-        alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4)
+        alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4, c1, A)
 
         x_axis.append(i)
         y_axis.append(np.abs(Fx))

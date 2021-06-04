@@ -1,7 +1,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 
-from functions import gradient_descent
+from functions import gradient_descent, newton
 from loadMNIST_V2 import MnistDataloader
 
 # 4c
@@ -23,24 +24,24 @@ x_test_filtered = []
 y_test_filtered = []
 
 # 0,1 filter
+# for i in range(30000):
+#     if y_train[i] == 0 | y_train[i] == 1:
+#         x_train_filtered.append(x_train[i])
+#         y_train_filtered.append(y_train[i])
+#
+#     if y_test[i] == 0 | y_test[i] == 1:
+#         x_test_filtered.append(x_test[i])
+#         y_test_filtered.append(y_test[i])
+
+# 8,9 filter
 for i in range(30000):
-    if y_train[i] == 0 | y_train[i] == 1:
+    if y_train[i] == 8 | y_train[i] == 9:
         x_train_filtered.append(x_train[i])
         y_train_filtered.append(y_train[i])
 
-    if y_test[i] == 0 | y_test[i] == 1:
+    if y_test[i] == 8 | y_test[i] == 9:
         x_test_filtered.append(x_test[i])
         y_test_filtered.append(y_test[i])
-
-# 8,9 filter
-# for i in range(30000):
-#     if y_train[i] == 8 | y_train[i] == 9:
-#         x_train_filtered.append(x_train[i])
-#         y_train_filtered.append(y_train[i])
-
-#     if y_test[i] == 8 | y_test[i] == 9:
-#         x_test_filtered.append(x_test[i])
-#         y_test_filtered.append(y_test[i])
 
 # reshape and normalize
 A_train = np.reshape(x_train_filtered, (np.shape(x_train_filtered)[0], 784)) / 255
@@ -50,18 +51,16 @@ A_test = np.transpose(A_test)
 
 plt.figure()
 plt.xlabel("k iteration")
-plt.ylabel("error")
+plt.ylabel("|F(w_k)|")
 w = np.zeros(784)
 
-plt.title('SD')
-x_axis, y_axis = gradient_descent(A_train, w, 1 - y_train_filtered)
-x1_axis, y1_axis = gradient_descent(A_test, w, 1 - y_test_filtered)
-plt.semilogy(x_axis, y_axis, label="SD train data")
-plt.semilogy(x1_axis, y1_axis, label="SD test data")
+# plt.title('Gradient Descent Test data Objective 8 9')
+# x_axis, y_axis = gradient_descent(A_test, w, 1 - np.array(y_test_filtered))
+# plt.semilogy(x_axis, y_axis, 'orange', label='Gradient Descent')
 
-# # plt.title('Newton')
-# # x1_axis, y1_axis = newton(A, b, w, y_train)
-# # plt.semilogy(x1_axis, y1_axis, label="")
+plt.title('Exact Newton Test data Objective 8 9')
+x1_axis, y1_axis = newton(A_test, w, 1 - np.array(y_test_filtered))
+plt.semilogy(x1_axis, y1_axis, 'orange', label='Exact Newton')
 
 plt.legend()
 plt.show()

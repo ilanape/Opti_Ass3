@@ -22,8 +22,8 @@ y3_axis = []
 for k in range(1, 9):
     eps = epsilon * (0.5 ** k)
     x_axis.append(k)
-    Fx, gradx, hessx = func(X, w, c1)
-    Fx_ed, gradx_ed, hessx_ed = func(X, w + eps * d, c1)
+    Fx, gradx, hessx = func(X, w, c1, True)
+    Fx_ed, gradx_ed = func(X, w + eps * d, c1)
 
     # Gradient test
     y_axis.append(np.abs(Fx_ed - Fx))
