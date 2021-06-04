@@ -15,6 +15,7 @@ def func(X, w, labels, h=False):
                      + np.transpose(c2) @ np.log(1 - sigm_XTw))
 
     # Gradient
+    sigm_XTw = sigm_XTw
     Grad = (1 / m) * X @ (sigm_XTw - c1)
 
     if h:
@@ -28,6 +29,7 @@ def func(X, w, labels, h=False):
 
 
 def linesearch(x, Fx, grad_x, d, alpha, beta, c, c1, A):
+    print(alpha)
     for j in range(100):
         Fx_ad, grad_ad = func(A, x + alpha * d, c1)
         if Fx_ad <= Fx + c * alpha * np.dot(grad_x, d):
