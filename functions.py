@@ -87,7 +87,6 @@ def newton(A, x, labels):
 
         # Convergence criterion
         if np.linalg.norm(x - x_old)/np.linalg.norm(x_old) < 0.0001:
-            print('here')
             break
 
     return x_axis, y_axis

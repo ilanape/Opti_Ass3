@@ -65,38 +65,31 @@ w = np.zeros(784)
 
 plt.figure()
 plt.xlabel("k iteration")
-plt.ylabel("F(w_k)")
+plt.ylabel("|F(w_k) - F(w*)|")
 
 # Gradient
 # plt.title('Gradient Descent 0 1')
-# x_axis, y_axis = gradient_descent(A_train, w, 1 - y_train_filtered)
-# x1_axis, y1_axis = gradient_descent(A_test, w, 1 - y_test_filtered)
+
+# plt.title('Gradient Descent Objective 8 9')
+# y_train_filtered = y_train_filtered % 8
+# y_test_filtered = y_test_filtered % 8
+
+# x_axis, y_axis = gradient_descent(A_train, w, y_train_filtered)
+# x1_axis, y1_axis = gradient_descent(A_test, w, y_test_filtered)
 # plt.semilogy(x_axis, np.abs(y_axis - y_axis[len(y_axis)-1]), 'blue', label='Train data')
-# plt.semilogy(x_axis, np.abs(y1_axis - y1_axis[len(y_axis)-1]), 'orange', label='Test data')
+# plt.semilogy(x_axis, np.abs(y1_axis - np.min(y1_axis)), 'orange', label='Test data')
 
 # Newton
 # plt.title('Exact Newton 0 1')
-# x_axis, y_axis = newton(A_train, w, 1 - y_train_filtered)
-# x1_axis, y1_axis = newton(A_test, w, 1 - y_test_filtered)
-# plt.semilogy(x_axis, np.abs(y_axis - y_axis[len(y_axis)-1]), 'blue', label='Train data')
-# plt.semilogy(x1_axis, np.abs(y1_axis - y1_axis[len(y1_axis)-1]), 'orange', label='Test data')
 
-# 8, 9
+plt.title('Exact Newton 8 9')
 y_train_filtered = y_train_filtered % 8
 y_test_filtered = y_test_filtered % 8
-# # Gradient
-# plt.title('Gradient Descent Objective 8 9')
-# x_axis, y_axis = gradient_descent(A_train, w, 1 - y_train_filtered)
-# x1_axis, y1_axis = gradient_descent(A_test, w, 1 - y_test_filtered)
-# plt.semilogy(x_axis, np.abs(y_axis - y_axis[len(y_axis)-1]), 'blue', label='Train data')
-# plt.semilogy(x1_axis, np.abs(y1_axis - y1_axis[len(y_axis)-1]), 'orange', label='Test data')
-# #
-# Newton
-plt.title('Exact Newton 8 9')
-x_axis, y_axis = newton(A_train, w, 1 - y_train_filtered)
-x1_axis, y1_axis = newton(A_test, w, 1 - y_test_filtered)
+
+x_axis, y_axis = newton(A_train, w, y_train_filtered)
+x1_axis, y1_axis = newton(A_test, w, y_test_filtered)
 plt.semilogy(x_axis, np.abs(y_axis - y_axis[len(y_axis)-1]), 'blue', label='Train data')
-plt.semilogy(x1_axis, np.abs(y1_axis - y_axis[len(y1_axis)-1]), 'orange', label='Test data')
+plt.semilogy(x1_axis, np.abs(y1_axis - np.min(y1_axis)), 'orange', label='Test data')
 
 plt.legend()
 plt.show()
