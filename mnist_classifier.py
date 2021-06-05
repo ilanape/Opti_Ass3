@@ -13,7 +13,10 @@ mnistDataLoader = MnistDataloader(
     'MNIST\\t10k-labels-idx1-ubyte\\t10k-labels.idx1-ubyte')
 (x_train, y_train), (x_test, y_test) = mnistDataLoader.load_data()
 
-x_train_filtered, y_train_filtered, x_test_filtered, y_test_filtered= [], [], [], []
+x_train_filtered = []
+y_train_filtered = []
+x_test_filtered = []
+y_test_filtered = []
 
 # 0,1 filter
 for i in range(30000):
