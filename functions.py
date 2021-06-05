@@ -29,13 +29,13 @@ def func(X, w, labels, h=False):
 
 
 def linesearch(x, Fx, grad_x, d, alpha, beta, c, c1, A):
-    print(alpha)
-    for j in range(100):
+    for j in range(10):
         Fx_ad, grad_ad = func(A, x + alpha * d, c1)
         if Fx_ad <= Fx + c * alpha * np.dot(grad_x, d):
-            return alpha
+            break
         else:
             alpha = beta * alpha
+    return alpha
 
 
 def gradient_descent(A, x, labels):
@@ -59,7 +59,7 @@ def gradient_descent(A, x, labels):
         if Fx < 0.001:
             break
 
-    return x_axis, y_axis
+    return x_axis, np.abs(y_axis - np.min(y_axis))
 
 
 def newton(A, x, labels):
@@ -86,5 +86,5 @@ def newton(A, x, labels):
         if Fx < 0.001:
             break
 
-    return x_axis, y_axis
+    return x_axis, np.abs(y_axis - np.min(y_axis))
 
