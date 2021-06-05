@@ -42,6 +42,7 @@ def gradient_descent(A, x, labels):
     c1 = np.array(labels)
     x_axis = []
     y_axis = []
+
     for i in range(100):
         print(i)
         Fx, grad_x = func(A, x, c1)
@@ -57,10 +58,10 @@ def gradient_descent(A, x, labels):
         x = np.clip(x, -1, 1)
 
         # Convergence criterion
-        if np.linalg.norm(x - x_old) / np.linalg.norm(x_old) < 0.001:
-            break
+        # if np.linalg.norm(x - x_old) / np.linalg.norm(x_old) < 0.001:
+        #     break
 
-    return x_axis, np.abs(y_axis - np.min(y_axis))
+    return x_axis, y_axis
 
 
 def newton(A, x, labels):
@@ -85,8 +86,8 @@ def newton(A, x, labels):
         x = np.clip(x, -1, 1)
 
         # Convergence criterion
-        if np.linalg.norm(x - x_old)/np.linalg.norm(x_old) < 0.001:
-            break
+        # if np.linalg.norm(x - x_old)/np.linalg.norm(x_old) < 0.001:
+        #     break
 
-    return x_axis, np.abs(y_axis - np.min(y_axis))
+    return x_axis, y_axis
 
