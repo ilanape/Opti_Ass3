@@ -58,7 +58,7 @@ def gradient_descent(A, x, labels):
         x = np.clip(x, -1, 1)
 
         # Convergence criterion
-        if np.linalg.norm(x - x_old) / np.linalg.norm(x_old) < 0.0001:
+        if np.linalg.norm(x - x_old) / np.linalg.norm(x_old) < 0.001:
             break
 
     return x_axis, y_axis
@@ -73,7 +73,7 @@ def newton(A, x, labels):
         print(i)
         Fx, grad_x, hess_x = func(A, x, c1, True)
         shape = np.shape(hess_x)
-        hess_x = hess_x + 0.0001 * np.eye(shape[0], shape[1])
+        hess_x = hess_x + 0.01 * np.eye(shape[0], shape[1])
         d = -1 * np.linalg.inv(hess_x) @ grad_x
         alpha = linesearch(x, Fx, grad_x, d, 1, 0.5, 1e-4, c1, A)
 
@@ -86,7 +86,7 @@ def newton(A, x, labels):
         x = np.clip(x, -1, 1)
 
         # Convergence criterion
-        if np.linalg.norm(x - x_old)/np.linalg.norm(x_old) < 0.0001:
+        if np.linalg.norm(x - x_old)/np.linalg.norm(x_old) < 0.001:
             break
 
     return x_axis, y_axis
